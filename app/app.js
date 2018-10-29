@@ -1,11 +1,25 @@
 let canvas = document.querySelector("canvas");
 let context = canvas.getContext("2d");
-context.strokeStyle = "maroon";
-context.lineWidth = "4";
-context.strokeRect(canvas.width/2 -60,200,80,204);
 
+function Queue(){
+    this.elements = [];
+}
+Queue.prototype.push = function (element) {
+    this.elements.unshift(element);
+}
+Queue.prototype.pop = function() {
+    return this.elements.pop();
+}
+Queue.prototype.get_size = function() {
+   return  this.elements.length;
+}
 
-function init(size) {
+function init(){
+    context.strokeStyle = "maroon";
+    context.lineWidth = "4";
+    context.strokeRect(canvas.width/2 -60,200,80,204);
+}
+function update_rectangle(size) {
     context.save();
     context.font = "20px SansSerif";
     context.clearRect(canvas.width/2+30,canvas.height/2-30,50,50);
@@ -31,6 +45,14 @@ function getData(callback){
     xhttp.send();
 }
 
+init();
+let q = new Queue();
+
+
 getData(function(response){
-    init(response.value);
+    q.push(response);
+    if(q.get_size()>0){
+        let element = q.pop();
+        console.log(element);
+    }
 });
